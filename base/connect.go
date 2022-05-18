@@ -60,7 +60,7 @@ func NewConnect(config Config, cache Cache) (conn Connect, err error) {
 	sqlDb.SetMaxOpenConns(30)                   //最大连接数
 	sqlDb.SetConnMaxLifetime(time.Second * 300) //设置连接空闲超时
 	//自动初始化表结构
-	if cfg.AutoMigrate {
+	if cfg.AutoMigrate && len(models) > 0 {
 		if err := db.AutoMigrate(models); err != nil {
 			logger.Fatal(err)
 		}

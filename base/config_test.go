@@ -6,9 +6,7 @@ import (
 )
 
 func TestNewConfig(t *testing.T) {
-	if cfg, err := NewConfig(); err != nil {
-		logger.Panic(err)
-	} else {
+	if cfg, err := NewConfig(); err == nil {
 		logger.Debug(cfg)
 	}
 }

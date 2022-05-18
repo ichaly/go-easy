@@ -27,12 +27,12 @@ type Config struct {
 func NewConfig() (cfg Config, err error) {
 	file, err := ioutil.ReadFile("./config.yml")
 	if err != nil {
-		logger.Fatalf("Read config err #%v ", err)
+		logger.Panicf("Read config err #%v ", err)
 		return
 	}
 	err = yaml.Unmarshal(file, &cfg)
 	if err != nil {
-		logger.Fatalf("Unmarshal: %v", err)
+		logger.Panicf("Unmarshal: %v", err)
 	}
 	return
 }
