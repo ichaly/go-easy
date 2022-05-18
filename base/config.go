@@ -26,7 +26,7 @@ type Config struct {
 
 func NewConfig() (cfg Config, err error) {
 	var f *os.File
-	if f, err = os.Open("./cfg/config.json"); err != nil {
+	if f, err = os.Open("./config.json"); err != nil {
 		logger.Panic(err)
 		return
 	}

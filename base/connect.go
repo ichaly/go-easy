@@ -19,9 +19,9 @@ type Connect struct{}
 type ctxTransactionKey struct{}
 
 var (
-	cfg       Config
-	db        *gorm.DB
-	injectors []func(db *gorm.DB)
+	cfg    Config
+	db     *gorm.DB
+	models []interface{}
 )
 
 func NewConnect(config Config, cache Cache) (conn Connect, err error) {
@@ -59,9 +59,11 @@ func NewConnect(config Config, cache Cache) (conn Connect, err error) {
 	sqlDb.SetMaxIdleConns(10)                   //最大空闲连接数
 	sqlDb.SetMaxOpenConns(30)                   //最大连接数
 	sqlDb.SetConnMaxLifetime(time.Second * 300) //设置连接空闲超时
-	//执行回调
-	for _, v := range injectors {
-		v(db)
+	//自动初始化表结构
+	if cfg.AutoMigrate {
+		if err := db.AutoMigrate(models); err != nil {
+			logger.Fatal(err)
+		}
 	}
 	conn = Connect{}
 	return
@@ -97,23 +99,12 @@ func (my *Connect) GetDB(ctx context.Context) *gorm.DB {
 	return db.WithContext(ctx)
 }
 
-func WithTransaction(ctx context.Context, handle func(tx context.Context) error) error {
+func Transaction(ctx context.Context, handle func(tx context.Context) error) error {
 	return db.WithContext(ctx).Transaction(func(db *gorm.DB) error {
 		return handle(context.WithValue(ctx, ctxTransactionKey{}, db))
 	})
 }
 
-// RegisterInjector 注册回调
-func RegisterInjector(f func(*gorm.DB)) {
-	injectors = append(injectors, f)
-}
-
-// SetupTableModel 自动初始化表结构
-func SetupTableModel(db *gorm.DB, models ...interface{}) {
-	if !cfg.AutoMigrate {
-		return
-	}
-	if err := db.AutoMigrate(models...); err != nil {
-		logger.Fatal(err)
-	}
+func RegisterAutoMigrateModels(dst ...interface{}) {
+	models = append(models, dst)
 }

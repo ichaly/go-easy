@@ -8,6 +8,7 @@ import (
 
 func init() {
 	logger.Debug("User init ...")
+	base.RegisterAutoMigrateModels(&User{})
 }
 
 // TableName 自定义表名
@@ -21,7 +22,7 @@ type User struct {
 	Email         string     `gorm:"size:50;unique_index;comment:邮箱;"`
 	Avatar        string     `gorm:"size:500;comment:头像;"`
 	Nickname      string     `gorm:"size:100;comment:昵称;"`
-	Password      string     `gorm:"size:100;comment:密码;" gq:"-"`
+	Password      string     `gorm:"size:100;comment:密码;"`
 	Gender        Gender     `gorm:"size:50;default:SECRET;comment:性别;"`
 	Province      string     `gorm:"size:100;comment:省份;"`
 	City          string     `gorm:"size:100;comment:城市;"`
