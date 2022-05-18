@@ -21,7 +21,7 @@ var (
 	requestGroup singleflight.Group
 )
 
-type noCacheContext struct{}
+type keyCacheContext struct{}
 
 type Cache struct {
 	Cache       *cache.Cache
@@ -88,7 +88,7 @@ func (my Cache) query(db *gorm.DB) {
 }
 
 func (my Cache) afterQuery(db *gorm.DB) {
-	if v := db.Statement.Context.Value(noCacheContext{}); v == nil {
+	if v := db.Statement.Context.Value(keyCacheContext{}); v == nil {
 		return
 	}
 	if db.Error != nil || db.Statement.Schema == nil {
@@ -147,7 +147,7 @@ func (my Cache) queryFromDB(db *gorm.DB, cacheKey string) {
 	)
 	var any interface{}
 	any, err, _ = requestGroup.Do(cacheKey, func() (interface{}, error) {
-		db.Statement.Context = context.WithValue(db.Statement.Context, noCacheContext{}, 1)
+		db.Statement.Context = context.WithValue(db.Statement.Context, keyCacheContext{}, 1)
 		return db.Statement.ConnPool.QueryContext(db.Statement.Context, db.Statement.SQL.String(), db.Statement.Vars...)
 	})
 	rows = any.(*sql.Rows)
