@@ -1,42 +1,38 @@
 package base
 
 import (
-	"encoding/json"
 	"github.com/ichaly/go-easy/base/logger"
-	"os"
+	"gopkg.in/yaml.v3"
+	"io/ioutil"
 )
 
 type Database struct {
-	Type     string     `json:"type"`
-	Url      string     `json:"url"`
-	Host     string     `json:"host"`
-	Port     int        `json:"port"`
-	Name     string     `json:"name"`
-	Username string     `json:"username"`
-	Password string     `json:"password"`
-	Sources  []Database `json:"sources"`
-	Replicas []Database `json:"replicas"`
+	Type     string     `yaml:"type"`
+	Url      string     `yaml:"url"`
+	Host     string     `yaml:"host"`
+	Port     int        `yaml:"port"`
+	Name     string     `yaml:"name"`
+	Username string     `yaml:"username"`
+	Password string     `yaml:"password"`
+	Sources  []Database `yaml:"sources"`
+	Replicas []Database `yaml:"replicas"`
 }
 
 type Config struct {
-	AutoMigrate bool     `json:"autoMigrate"`
-	DataSource  Database `json:"dataSource"`
-	CacheStore  Database `json:"cacheStore"`
+	AutoMigrate bool     `yaml:"autoMigrate"`
+	DataSource  Database `yaml:"dataSource"`
+	CacheStore  Database `yaml:"cacheStore"`
 }
 
 func NewConfig() (cfg Config, err error) {
-	var f *os.File
-	if f, err = os.Open("./config.json"); err != nil {
-		logger.Panic(err)
+	file, err := ioutil.ReadFile("./config.yml")
+	if err != nil {
+		logger.Fatalf("Read config err #%v ", err)
 		return
 	}
-	defer func(f *os.File) {
-		_ = f.Close()
-	}(f)
-	decoder := json.NewDecoder(f)
-	if err = decoder.Decode(&cfg); err != nil {
-		logger.Panic(err)
-		return
+	err = yaml.Unmarshal(file, &cfg)
+	if err != nil {
+		logger.Fatalf("Unmarshal: %v", err)
 	}
 	return
 }
