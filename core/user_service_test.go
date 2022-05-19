@@ -1,19 +1,19 @@
-package main
+package core
 
 import (
 	"context"
 	"github.com/ichaly/go-easy/base"
-	"github.com/ichaly/go-easy/core"
 	"go.uber.org/fx"
+	"testing"
 )
 
-func main() {
+func TestListAll(t *testing.T) {
 	app := fx.New(
 		//禁用fx 默认logger
 		fx.NopLogger,
 		base.Initializer,
-		core.Initializer,
-		fx.Invoke(func(s core.IUserService) {
+		Initializer,
+		fx.Invoke(func(s IUserService) {
 			s.ListAll(context.Background())
 		}),
 	)

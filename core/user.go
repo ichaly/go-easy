@@ -8,7 +8,7 @@ import (
 
 func init() {
 	logger.Debug("User init ...")
-	base.RegisterAutoMigrateModels(&User{})
+	base.RegisterMigrateModels(&User{})
 }
 
 // TableName 自定义表名

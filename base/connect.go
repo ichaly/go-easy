@@ -8,6 +8,7 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	log "gorm.io/gorm/logger"
 	"gorm.io/plugin/dbresolver"
 	"reflect"
 	"strings"
@@ -27,7 +28,7 @@ var (
 func NewConnect(config Config, cache Cache) (conn Connect, err error) {
 	cfg = config
 	master := config.DataSource
-	if db, err = gorm.Open(buildDialect(master), &gorm.Config{}); err != nil {
+	if db, err = gorm.Open(buildDialect(master), &gorm.Config{Logger: log.Default.LogMode(log.Info)}); err != nil {
 		logger.Panic(err)
 		return
 	}
@@ -61,7 +62,7 @@ func NewConnect(config Config, cache Cache) (conn Connect, err error) {
 	sqlDb.SetConnMaxLifetime(time.Second * 300) //设置连接空闲超时
 	//自动初始化表结构
 	if cfg.AutoMigrate && len(models) > 0 {
-		if err := db.AutoMigrate(models); err != nil {
+		if err := db.AutoMigrate(models...); err != nil {
 			logger.Fatal(err)
 		}
 	}
@@ -105,6 +106,6 @@ func Transaction(ctx context.Context, handle func(tx context.Context) error) err
 	})
 }
 
-func RegisterAutoMigrateModels(dst ...interface{}) {
-	models = append(models, dst)
+func RegisterMigrateModels(args ...interface{}) {
+	models = append(models, args...)
 }

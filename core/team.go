@@ -7,7 +7,7 @@ import (
 
 func init() {
 	logger.Debug("Team init ...")
-	base.RegisterAutoMigrateModels(&Team{})
+	base.RegisterMigrateModels(&Team{})
 }
 
 // TableName 自定义表名

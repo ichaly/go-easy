@@ -1,0 +1,14 @@
+autoMigrate: true
+dataSource:
+  type: pgsql
+  host: 127.0.0.1
+  port: 5432
+  name: yoga-go
+  username: postgres
+  password: postgres
+cacheStore:
+  type: redis
+  host: 127.0.0.1
+  port: 6379
+  name: 0
+  password: redis123
