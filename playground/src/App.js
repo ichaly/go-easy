@@ -1,5 +1,3 @@
-// @flow
-
 import React, {Component} from 'react'
 import GraphiQL from 'graphiql'
 import GraphiQLExplorer from 'graphiql-explorer'
@@ -10,20 +8,12 @@ import {makeDefaultArg, getDefaultScalarArgValue} from './CustomArgs'
 import 'graphiql/graphiql.css'
 import './App.css'
 
-import type {GraphQLSchema} from 'graphql'
-
-function fetcher (params: Object): Object {
-  return fetch(
-    'http://localhost:8080/api',
-    {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(params)
-    }
-  ).then(function (response) {
+function fetcher (params) {
+  return fetch('http://localhost:8080/api', {
+    method: 'POST', headers: {
+      Accept: 'application/json', 'Content-Type': 'application/json'
+    }, body: JSON.stringify(params)
+  }).then(function (response) {
     return response.text()
   }).then(function (responseBody) {
     try {
@@ -37,15 +27,9 @@ function fetcher (params: Object): Object {
 const DEFAULT_QUERY = `# shift-option/alt-click on a query below to jump to it in the explorer
 # option/alt-click on a field in the explorer to select all subfields`
 
-type State = {
-  schema: ?GraphQLSchema,
-  query: string,
-  explorerIsOpen: boolean
-};
-
-class App extends Component<{}, State> {
-  _graphiql: GraphiQL
-  state = {schema: null, query: DEFAULT_QUERY, explorerIsOpen: true}
+class App extends Component {
+  _graphiql
+  state = {schema: null, query: DEFAULT_QUERY, explorerIsOpen: false}
 
   componentDidMount () {
     fetcher({
@@ -53,18 +37,14 @@ class App extends Component<{}, State> {
     }).then(result => {
       const editor = this._graphiql.getQueryEditor()
       editor.setOption('extraKeys', {
-        ...(editor.options.extraKeys || {}),
-        'Shift-Alt-LeftClick': this._handleInspectOperation
+        ...(editor.options.extraKeys || {}), 'Shift-Alt-LeftClick': this._handleInspectOperation
       })
 
       this.setState({schema: buildClientSchema(result.data)})
     })
   }
 
-  _handleInspectOperation = (
-    cm: any,
-    mousePos: { line: Number, ch: Number }
-  ) => {
+  _handleInspectOperation = (cm, mousePos) => {
     const parsedQuery = parse(this.state.query || '')
 
     if (!parsedQuery) {
@@ -76,8 +56,7 @@ class App extends Component<{}, State> {
     var start = {line: mousePos.line, ch: token.start}
     var end = {line: mousePos.line, ch: token.end}
     var position = {
-      start: cm.indexFromPos(start),
-      end: cm.indexFromPos(end)
+      start: cm.indexFromPos(start), end: cm.indexFromPos(end)
     }
 
     var def = parsedQuery.definitions.find(definition => {
@@ -91,25 +70,13 @@ class App extends Component<{}, State> {
     })
 
     if (!def) {
-      console.error(
-        'Unable to find definition corresponding to mouse position'
-      )
+      console.error('Unable to find definition corresponding to mouse position')
       return null
     }
 
-    var operationKind =
-      def.kind === 'OperationDefinition'
-        ? def.operation
-        : def.kind === 'FragmentDefinition'
-          ? 'fragment'
-          : 'unknown'
+    var operationKind = def.kind === 'OperationDefinition' ? def.operation : def.kind === 'FragmentDefinition' ? 'fragment' : 'unknown'
 
-    var operationName =
-      def.kind === 'OperationDefinition' && !!def.name
-        ? def.name.value
-        : def.kind === 'FragmentDefinition' && !!def.name
-          ? def.name.value
-          : 'unknown'
+    var operationName = def.kind === 'OperationDefinition' && !!def.name ? def.name.value : def.kind === 'FragmentDefinition' && !!def.name ? def.name.value : 'unknown'
 
     var selector = `.graphiql-explorer-root #${operationKind}-${operationName}`
 
@@ -117,7 +84,7 @@ class App extends Component<{}, State> {
     el && el.scrollIntoView()
   }
 
-  _handleEditQuery = (query: string): void => this.setState({query})
+  _handleEditQuery = (query) => this.setState({query})
 
   _handleToggleExplorer = () => {
     this.setState({explorerIsOpen: !this.state.explorerIsOpen})
@@ -125,15 +92,12 @@ class App extends Component<{}, State> {
 
   render () {
     const {query, schema} = this.state
-    return (
-      <div className="graphiql-container">
+    return (<div className="graphiql-container">
         <GraphiQLExplorer
           schema={schema}
           query={query}
           onEdit={this._handleEditQuery}
-          onRunOperation={operationName =>
-            this._graphiql.handleRunQuery(operationName)
-          }
+          onRunOperation={operationName => this._graphiql.handleRunQuery(operationName)}
           explorerIsOpen={this.state.explorerIsOpen}
           onToggleExplorer={this._handleToggleExplorer}
           getDefaultScalarArgValue={getDefaultScalarArgValue}
@@ -176,8 +140,7 @@ class App extends Component<{}, State> {
             />
           </GraphiQL.Toolbar>
         </GraphiQL>
-      </div>
-    )
+      </div>)
   }
 }
 
