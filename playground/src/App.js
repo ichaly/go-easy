@@ -14,7 +14,7 @@ import type {GraphQLSchema} from 'graphql'
 
 function fetcher (params: Object): Object {
   return fetch(
-    'http://localhost:8080/query',
+    'http://localhost:8080/api',
     {
       method: 'POST',
       headers: {
