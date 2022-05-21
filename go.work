@@ -4,5 +4,3 @@ use (
 	./base
 	./core
 )
-
-replace github.com/99designs/gqlgen v0.17.5 => ../gqlgen
