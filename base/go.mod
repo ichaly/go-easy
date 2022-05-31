@@ -6,7 +6,7 @@ require (
 	github.com/99designs/gqlgen v0.17.5
 	github.com/eko/gocache/v2 v2.3.0
 	github.com/go-redis/redis/v8 v8.11.5
-	github.com/joho/godotenv v1.4.0
+	github.com/ichaly/go-env v0.0.1
 	github.com/natefinch/lumberjack v2.0.0+incompatible
 	github.com/sony/sonyflake v1.0.0
 	go.uber.org/fx v1.17.1

@@ -1,7 +1,7 @@
 package base
 
 import (
-	_ "github.com/joho/godotenv/autoload"
+	_ "github.com/ichaly/go-env/auto"
 	"go.uber.org/fx"
 )
 
