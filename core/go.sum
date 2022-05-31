@@ -50,6 +50,8 @@ github.com/hashicorp/golang-lru v0.5.4 h1:YDjusn29QI/Das2iO9M0BHnIbxPeyuCHsjMW+l
 github.com/hashicorp/golang-lru v0.5.4/go.mod h1:iADmTwqILo4mZ8BN3D2Q6+9jd8WM5uGBxy+E8yxSoD4=
 github.com/ichaly/go-easy/base v0.0.1 h1:64XE24BtpWnh/LGP+JYY12FsfXmokhqzJdSHCBav/8U=
 github.com/ichaly/go-easy/base v0.0.1/go.mod h1:HSMJCinnMTafS2S0RGMqezhW28wmY+cftm1RFBP8kK8=
+github.com/ichaly/go-env v0.0.1 h1:FjSpqIXuy5XpSlntRipV44Lqw8xxL6gn8epV6BMEDWU=
+github.com/ichaly/go-env v0.0.1/go.mod h1:d2LCz0acuEUkpWLAoKkh+qX3CuqkV3HjfOqr/OFwPVE=
 github.com/jinzhu/inflection v1.0.0 h1:K317FqzuhWc8YvSVlFMCCUb36O/S9MCKRDI7QkRKD/E=
 github.com/jinzhu/inflection v1.0.0/go.mod h1:h+uFLlag+Qp1Va5pdKtLDYj+kHp5pxUVkryuEj+Srlc=
 github.com/jinzhu/now v1.1.4 h1:tHnRBy1i5F2Dh8BAFxqFzxKqqvezXrL2OW1TnX+Mlas=

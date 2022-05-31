@@ -31,8 +31,8 @@ func main() {
 	r.Use(cors.Default())
 	r.GET("/", playgroundHandler())
 	r.POST("/api", graphqlHandler())
-	fmt.Println("Now server is running on port 8080")
-	fmt.Printf("Connect to http://localhost:%s/ for GraphQL playground\n", port)
-	fmt.Println("Test with Get: curl -g 'http://localhost:8080/api?query={hello}'")
+	fmt.Printf("Now server is running on port %s\n", port)
+	fmt.Printf("Connect to http://localhost%s/ for GraphQL playground\n", port)
+	fmt.Printf("Test with Get: curl -g 'http://localhost%s/api?query={hello}'\n", port)
 	_ = r.Run(port)
 }
