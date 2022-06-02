@@ -6,8 +6,8 @@ import (
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/ichaly/go-easy/core/graph"
-	"github.com/ichaly/go-easy/core/graph/generated"
+	"github.com/ichaly/go-easy/core/generated"
+	"github.com/ichaly/go-easy/core/generated/resolver"
 	"github.com/ichaly/go-env"
 )
 
@@ -19,7 +19,7 @@ func playgroundHandler() gin.HandlerFunc {
 }
 
 func graphqlHandler() gin.HandlerFunc {
-	h := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{}}))
+	h := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &resolver.Resolver{}}))
 	return func(c *gin.Context) {
 		h.ServeHTTP(c.Writer, c.Request)
 	}
