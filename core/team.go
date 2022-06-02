@@ -16,5 +16,6 @@ func (Team) TableName() string {
 }
 
 type Team struct {
+	Name string `gorm:"size:100;comment:名称;"`
 	base.Entity
 }
