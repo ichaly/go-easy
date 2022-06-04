@@ -9,4 +9,5 @@ var Initializer = fx.Options(
 	fx.Provide(NewConfig),
 	fx.Provide(NewCache),
 	fx.Provide(NewConnect),
+	fx.Provide(NewServer),
 )
