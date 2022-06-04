@@ -26,7 +26,7 @@ func graphqlHandler(schema graphql.ExecutableSchema) gin.HandlerFunc {
 	}
 }
 
-func NewServer(lifecycle fx.Lifecycle, schema graphql.ExecutableSchema) {
+func NewEngine(lifecycle fx.Lifecycle, schema graphql.ExecutableSchema) {
 	r := gin.New()
 	r.Use(cors.Default())
 	r.GET("/", playgroundHandler())
