@@ -10,4 +10,5 @@ var Initializer = fx.Options(
 	fx.Provide(NewCache),
 	fx.Provide(NewConnect),
 	fx.Provide(NewEngine),
+	fx.Invoke(Bootstrap),
 )

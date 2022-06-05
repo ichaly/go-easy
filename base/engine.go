@@ -1,15 +1,11 @@
 package base
 
 import (
-	"context"
-	"fmt"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/ichaly/go-env"
-	"go.uber.org/fx"
 )
 
 func playgroundHandler() gin.HandlerFunc {
@@ -26,20 +22,10 @@ func graphqlHandler(schema graphql.ExecutableSchema) gin.HandlerFunc {
 	}
 }
 
-func NewEngine(lifecycle fx.Lifecycle, schema graphql.ExecutableSchema) *gin.Engine {
+func NewEngine(schema graphql.ExecutableSchema) *gin.Engine {
 	r := gin.New()
 	r.Use(cors.Default())
 	r.GET("/", playgroundHandler())
 	r.POST("/api", graphqlHandler(schema))
-	lifecycle.Append(fx.Hook{
-		OnStart: func(ctx context.Context) error {
-			port, _ := env.String(":${PORT:=8080}")
-			fmt.Printf("Now server is running on port %s\n", port)
-			fmt.Printf("Connect to http://localhost%s/ for GraphQL playground\n", port)
-			fmt.Printf("Test with Get: curl -g 'http://localhost%s/api?query={hello}'\n", port)
-			_ = r.Run(port)
-			return nil
-		},
-	})
 	return r
 }
