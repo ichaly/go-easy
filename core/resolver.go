@@ -1,5 +1,6 @@
 package core
 
+//go:generate go run github.com/99designs/gqlgen generate
 import "github.com/99designs/gqlgen/graphql"
 
 // This file will not be regenerated automatically.
