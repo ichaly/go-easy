@@ -22,7 +22,15 @@ func (r *userResolver) ID(ctx context.Context, obj *User) (string, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
+// Mutation returns MutationResolver implementation.
+func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
+
+// Query returns QueryResolver implementation.
+func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
+
 // User returns UserResolver implementation.
 func (r *Resolver) User() UserResolver { return &userResolver{r} }
 
+type mutationResolver struct{ *Resolver }
+type queryResolver struct{ *Resolver }
 type userResolver struct{ *Resolver }

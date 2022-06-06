@@ -7,7 +7,8 @@ import "github.com/99designs/gqlgen/graphql"
 //
 // It serves as dependency injection for your app, add any dependencies you require here.
 
-type Resolver struct{}
+type Resolver struct {
+}
 
 func NewSchema() graphql.ExecutableSchema {
 	return NewExecutableSchema(Config{Resolvers: &Resolver{}})
