@@ -6,7 +6,7 @@ import (
 )
 
 type IUserService interface {
-	ListAll(ctx context.Context) []User
+	ListAll(ctx context.Context) ([]User, error)
 	SignIn(ctx context.Context, username string, password string) User
 	Update(ctx context.Context, user User) (rows int64, err error)
 	Delete(ctx context.Context, ids []uint64) (rows int64, err error)
@@ -33,7 +33,7 @@ func (my userService) SignIn(ctx context.Context, username string, password stri
 	return user
 }
 
-func (my userService) ListAll(ctx context.Context) []User {
+func (my userService) ListAll(ctx context.Context) ([]User, error) {
 	return my.dao.List(ctx)
 }
 

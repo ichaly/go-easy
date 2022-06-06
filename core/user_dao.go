@@ -8,7 +8,7 @@ import (
 )
 
 type IUserDao interface {
-	List(ctx context.Context) []User
+	List(ctx context.Context) ([]User, error)
 	Save(ctx context.Context, user *User) (rows int64, err error)
 	Update(ctx context.Context, user User) (rows int64, err error)
 	Delete(ctx context.Context, ids []uint64) (rows int64, err error)
@@ -39,24 +39,16 @@ func (my userDao) Update(ctx context.Context, user User) (rows int64, err error)
 		return
 	}
 	r := my.db(ctx).Model(&user).Updates(user)
-	if err = r.Error; err != nil {
-		return
-	}
-	rows = r.RowsAffected
-	return
+	return r.RowsAffected, r.Error
 }
 
-func (my userDao) List(ctx context.Context) []User {
+func (my userDao) List(ctx context.Context) ([]User, error) {
 	var users []User
-	my.db(ctx).Find(&users)
-	return users
+	r := my.db(ctx).Find(&users)
+	return users, r.Error
 }
 
 func (my userDao) Save(ctx context.Context, user *User) (rows int64, err error) {
 	r := my.db(ctx).Save(user)
-	if err = r.Error; err != nil {
-		return
-	}
-	rows = r.RowsAffected
-	return
+	return r.RowsAffected, r.Error
 }

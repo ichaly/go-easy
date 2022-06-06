@@ -16,7 +16,7 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) 
 }
 
 func (r *queryResolver) Users(ctx context.Context) ([]User, error) {
-	return r.userService.ListAll(ctx), nil
+	return r.userService.ListAll(ctx)
 }
 
 func (r *userResolver) ID(ctx context.Context, obj *User) (string, error) {
