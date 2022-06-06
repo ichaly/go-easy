@@ -6,6 +6,7 @@ package core
 import (
 	"context"
 	"fmt"
+	"strconv"
 
 	"github.com/ichaly/go-easy/core/model"
 )
@@ -14,12 +15,12 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) 
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) Users(ctx context.Context) ([]*User, error) {
-	panic(fmt.Errorf("not implemented"))
+func (r *queryResolver) Users(ctx context.Context) ([]User, error) {
+	return r.userService.ListAll(ctx), nil
 }
 
 func (r *userResolver) ID(ctx context.Context, obj *User) (string, error) {
-	panic(fmt.Errorf("not implemented"))
+	return strconv.FormatUint(obj.ID, 10), nil
 }
 
 // Mutation returns MutationResolver implementation.
