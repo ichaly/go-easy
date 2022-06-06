@@ -15,7 +15,8 @@ directive @goTag(
 
 type User {
     id: ID!
-    name: String!
+    nickname: String!
+    username: String!
 }
 
 input NewUser {

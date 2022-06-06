@@ -14,7 +14,7 @@ func (r *mutationResolver) CreateTeam(ctx context.Context, input model.NewTeam) 
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) Teams(ctx context.Context) ([]*Team, error) {
+func (r *queryResolver) Teams(ctx context.Context) ([]Team, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
