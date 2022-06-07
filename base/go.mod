@@ -14,6 +14,7 @@ require (
 	go.uber.org/fx v1.17.1
 	go.uber.org/zap v1.21.0
 	golang.org/x/crypto v0.0.0-20220516162934-403b01795ae8
+	golang.org/x/exp v0.0.0-20220602145555-4a0574d9293f
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
 	gopkg.in/yaml.v3 v3.0.0-20220512140231-539c8e751b99
 	gorm.io/driver/mysql v1.3.3
