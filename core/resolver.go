@@ -9,12 +9,15 @@ import "github.com/99designs/gqlgen/graphql"
 
 type Resolver struct {
 	userService IUserService
+	teamService ITeamService
 }
 
 func NewSchema(
 	userService IUserService,
+	teamService ITeamService,
 ) graphql.ExecutableSchema {
 	return NewExecutableSchema(Config{Resolvers: &Resolver{
 		userService,
+		teamService,
 	}})
 }

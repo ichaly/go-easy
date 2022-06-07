@@ -2,14 +2,14 @@ package base
 
 import "context"
 
-type IService[T Entity] interface {
+type IService[T model] interface {
 	Save(ctx context.Context, t *T) (rows int64, err error)
 	Delete(ctx context.Context, ids []uint64) (rows int64, err error)
 	Update(ctx context.Context, t T) (rows int64, err error)
 	List(ctx context.Context, query Query) (Result[T], error)
 }
 
-type Service[T Entity] struct {
+type Service[T model] struct {
 	dao IDao[T]
 }
 

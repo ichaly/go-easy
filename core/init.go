@@ -7,7 +7,9 @@ import (
 
 var Initializer = fx.Options(
 	base.Initializer,
+	fx.Provide(NewSchema),
 	fx.Provide(NewUserDao),
 	fx.Provide(NewUserService),
-	fx.Provide(NewSchema),
+	fx.Provide(NewTeamDao),
+	fx.Provide(NewTeamService),
 )

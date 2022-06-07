@@ -3,8 +3,7 @@
 package model
 
 type NewTeam struct {
-	Name   string `json:"name"`
-	UserID string `json:"userId"`
+	Name string `json:"name"`
 }
 
 type NewUser struct {

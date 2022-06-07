@@ -18,6 +18,10 @@ type Entity struct {
 	DeletedAt gorm.DeletedAt `gorm:"index;comment:逻辑删除;"`
 }
 
+func (my Entity) GetID() uint64 {
+	return my.ID
+}
+
 func (my Entity) MarshalBinary() ([]byte, error) {
 	return json.Marshal(my)
 }
