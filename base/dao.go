@@ -26,12 +26,17 @@ type IDao[T model] interface {
 }
 
 type Dao[T model] struct {
+	DB func(ctx context.Context) *gorm.DB
 }
 
-func (my Dao[T]) DB(ctx context.Context) *gorm.DB {
+func NewDao[T model]() *Dao[T] {
 	var conn Connect
 	fx.Populate(conn)
-	return conn.GetDB(ctx)
+	return &Dao[T]{
+		DB: func(ctx context.Context) *gorm.DB {
+			return conn.GetDB(ctx)
+		},
+	}
 }
 
 func (my Dao[T]) Save(ctx context.Context, t *T) (rows int64, err error) {

@@ -11,11 +11,11 @@ type ITeamDao interface {
 }
 
 func NewTeamDao() ITeamDao {
-	return teamDao{base.Dao[Team]{}}
+	return teamDao{base.NewDao[Team]()}
 }
 
 type teamDao struct {
-	base.Dao[Team]
+	*base.Dao[Team]
 }
 
 func (my teamDao) ListAll(ctx context.Context) ([]Team, error) {

@@ -1,6 +1,8 @@
 package base
 
-import "context"
+import (
+	"context"
+)
 
 type IService[T model] interface {
 	Save(ctx context.Context, t *T) (rows int64, err error)
@@ -11,6 +13,12 @@ type IService[T model] interface {
 
 type Service[T model] struct {
 	dao IDao[T]
+}
+
+func NewService[T model]() *Service[T] {
+	return &Service[T]{
+		dao: NewDao[T](),
+	}
 }
 
 func (my Service[T]) Save(ctx context.Context, t *T) (rows int64, err error) {

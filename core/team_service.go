@@ -11,12 +11,12 @@ type ITeamService interface {
 }
 
 func NewTeamService(dao ITeamDao) ITeamService {
-	return teamService{dao: dao}
+	return teamService{dao, base.NewService[Team]()}
 }
 
 type teamService struct {
 	dao ITeamDao
-	base.Service[Team]
+	*base.Service[Team]
 }
 
 func (my teamService) ListAll(ctx context.Context) ([]Team, error) {

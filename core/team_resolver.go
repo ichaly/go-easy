@@ -6,6 +6,7 @@ package core
 import (
 	"context"
 	"fmt"
+	"strconv"
 
 	"github.com/ichaly/go-easy/core/model"
 )
@@ -21,7 +22,7 @@ func (r *queryResolver) Teams(ctx context.Context) ([]Team, error) {
 }
 
 func (r *teamResolver) ID(ctx context.Context, obj *Team) (string, error) {
-	panic(fmt.Errorf("not implemented"))
+	return strconv.FormatUint(obj.ID, 10), nil
 }
 
 // Team returns TeamResolver implementation.
