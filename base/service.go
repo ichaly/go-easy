@@ -15,10 +15,8 @@ type Service[T model] struct {
 	dao IDao[T]
 }
 
-func NewService[T model]() *Service[T] {
-	return &Service[T]{
-		dao: NewDao[T](),
-	}
+func NewService[T model](dao IDao[T]) *Service[T] {
+	return &Service[T]{dao}
 }
 
 func (my Service[T]) Save(ctx context.Context, t *T) (rows int64, err error) {

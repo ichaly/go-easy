@@ -11,7 +11,7 @@ type ITeamService interface {
 }
 
 func NewTeamService(dao ITeamDao) ITeamService {
-	return teamService{dao, base.NewService[Team]()}
+	return teamService{dao, base.NewService[Team](dao)}
 }
 
 type teamService struct {
