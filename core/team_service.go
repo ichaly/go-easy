@@ -16,7 +16,7 @@ func NewTeamService(dao ITeamDao) ITeamService {
 
 type teamService struct {
 	dao ITeamDao
-	*base.Service[Team]
+	base.IService[Team]
 }
 
 func (my teamService) ListAll(ctx context.Context) ([]Team, error) {
