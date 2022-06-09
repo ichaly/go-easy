@@ -2,7 +2,6 @@ package base
 
 import (
 	"context"
-	"errors"
 	"go.uber.org/fx"
 	"gorm.io/gorm"
 )
@@ -20,9 +19,8 @@ type Result[T model] struct {
 
 type IDao[T model] interface {
 	Save(ctx context.Context, t *T) (rows int64, err error)
-	Delete(ctx context.Context, ids []uint64) (rows int64, err error)
-	Update(ctx context.Context, t T) (rows int64, err error)
 	List(ctx context.Context, query Query) (Result[T], error)
+	Delete(ctx context.Context, ids []uint64) (rows int64, err error)
 }
 
 type Dao[T model] struct {
@@ -40,22 +38,18 @@ func NewDao[T model]() *Dao[T] {
 }
 
 func (my Dao[T]) Save(ctx context.Context, t *T) (rows int64, err error) {
-	r := my.DB(ctx).Save(t)
+	var r *gorm.DB
+	if (*t).GetID() <= 0 {
+		r = my.DB(ctx).Create(t)
+	} else {
+		r = my.DB(ctx).Model(t).Updates(t)
+	}
 	return r.RowsAffected, r.Error
 }
 
 func (my Dao[T]) Delete(ctx context.Context, ids []uint64) (rows int64, err error) {
 	model := new(T)
 	r := my.DB(ctx).Delete(&model, ids)
-	return r.RowsAffected, r.Error
-}
-
-func (my Dao[T]) Update(ctx context.Context, t T) (rows int64, err error) {
-	if t.GetID() <= 0 {
-		err = errors.New("ID can't be Zero")
-		return
-	}
-	r := my.DB(ctx).Model(&t).Updates(t)
 	return r.RowsAffected, r.Error
 }
 
