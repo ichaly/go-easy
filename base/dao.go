@@ -17,43 +17,44 @@ type Result[T model] struct {
 }
 
 type IDao[T model] interface {
+	WithContext(ctx context.Context) *gorm.DB
 	Save(ctx context.Context, t *T) (rows int64, err error)
 	List(ctx context.Context, query Query) (Result[T], error)
 	Delete(ctx context.Context, ids []uint64) (rows int64, err error)
 }
 
 func NewDao[T model](conn Connect) IDao[T] {
-	return dao[T]{
-		db: func(ctx context.Context) *gorm.DB {
-			return conn.GetDB(ctx)
-		},
-	}
+	return dao[T]{conn}
 }
 
 type dao[T model] struct {
-	db func(ctx context.Context) *gorm.DB
+	conn Connect
+}
+
+func (my dao[T]) WithContext(ctx context.Context) *gorm.DB {
+	return my.conn.GetDB(ctx)
 }
 
 func (my dao[T]) Save(ctx context.Context, t *T) (rows int64, err error) {
 	var r *gorm.DB
 	if (*t).GetID() <= 0 {
-		r = my.db(ctx).Create(t)
+		r = my.WithContext(ctx).Create(t)
 	} else {
-		r = my.db(ctx).Model(t).Updates(t)
+		r = my.WithContext(ctx).Model(t).Updates(t)
 	}
 	return r.RowsAffected, r.Error
 }
 
 func (my dao[T]) Delete(ctx context.Context, ids []uint64) (rows int64, err error) {
 	model := new(T)
-	r := my.db(ctx).Delete(&model, ids)
+	r := my.WithContext(ctx).Delete(&model, ids)
 	return r.RowsAffected, r.Error
 }
 
 func (my dao[T]) List(ctx context.Context, query Query) (Result[T], error) {
 	var rows []T
 	var count int64
-	r := my.db(ctx).Find(&rows).Count(&count)
+	r := my.WithContext(ctx).Find(&rows).Count(&count)
 	return Result[T]{
 		Total: count,
 		Page:  query.Page,
