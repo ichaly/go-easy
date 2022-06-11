@@ -6,41 +6,29 @@ import (
 )
 
 type IUserService interface {
+	base.IService[User]
 	ListAll(ctx context.Context) ([]User, error)
-	SignIn(ctx context.Context, username string, password string) User
-	Update(ctx context.Context, user User) (rows int64, err error)
-	Delete(ctx context.Context, ids []uint64) (rows int64, err error)
+	SignIn(ctx context.Context, username string, password string) (user *User, err error)
 }
 
 func NewUserService(dao IUserDao) IUserService {
-	return userService{dao}
+	return userService{dao, base.NewService[User](dao)}
 }
 
 type userService struct {
 	dao IUserDao
-}
-
-func (my userService) SignIn(ctx context.Context, username string, password string) User {
-	var user User
-	_ = base.Transaction(ctx, func(tx context.Context) error {
-		user = User{Username: username, Password: password}
-		_, err := my.dao.Save(tx, &user)
-		if err != nil {
-			return err
-		}
-		return nil
-	})
-	return user
+	base.IService[User]
 }
 
 func (my userService) ListAll(ctx context.Context) ([]User, error) {
-	return my.dao.List(ctx)
+	return my.dao.ListAll(ctx)
 }
 
-func (my userService) Update(ctx context.Context, user User) (rows int64, err error) {
-	return my.dao.Update(ctx, user)
-}
-
-func (my userService) Delete(ctx context.Context, ids []uint64) (rows int64, err error) {
-	return my.dao.Delete(ctx, ids)
+func (my userService) SignIn(ctx context.Context, username string, password string) (user *User, err error) {
+	err = base.Transaction(ctx, func(tx context.Context) error {
+		user = &User{Username: username, Password: password}
+		_, err = my.dao.Save(tx, user)
+		return err
+	})
+	return
 }

@@ -7,7 +7,6 @@ require (
 	github.com/ichaly/go-easy/base v0.0.1
 	github.com/vektah/gqlparser/v2 v2.4.2
 	go.uber.org/fx v1.17.1
-	gorm.io/gorm v1.23.5
 )
 
 require (
@@ -24,4 +23,5 @@ require (
 	golang.org/x/crypto v0.0.0-20220516162934-403b01795ae8 // indirect
 	golang.org/x/sys v0.0.0-20211019181941-9d821ace8654 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0 // indirect
+	gorm.io/gorm v1.23.5 // indirect
 )

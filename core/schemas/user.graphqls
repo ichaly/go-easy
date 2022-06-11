@@ -20,8 +20,8 @@ type User {
 }
 
 input NewUser {
-    id: ID!
     name: String!
+    password: String!
 }
 
 

@@ -5,14 +5,13 @@ package core
 
 import (
 	"context"
-	"fmt"
 	"strconv"
 
 	"github.com/ichaly/go-easy/core/model"
 )
 
 func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) (*User, error) {
-	panic(fmt.Errorf("not implemented"))
+	return r.userService.SignIn(ctx, input.Name, input.Password)
 }
 
 func (r *queryResolver) Users(ctx context.Context) ([]User, error) {
