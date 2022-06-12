@@ -8,8 +8,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+const ENDPOINT string = "/api"
+
 func playgroundHandler() gin.HandlerFunc {
-	h := playground.Handler("GraphQL", "/api")
+	h := playground.Handler("GraphQL", ENDPOINT)
 	return func(c *gin.Context) {
 		h.ServeHTTP(c.Writer, c.Request)
 	}
@@ -25,7 +27,7 @@ func graphqlHandler(schema graphql.ExecutableSchema) gin.HandlerFunc {
 func NewEngine(schema graphql.ExecutableSchema) *gin.Engine {
 	r := gin.New()
 	r.Use(cors.Default())
+	r.POST(ENDPOINT, graphqlHandler(schema))
 	r.GET("/", playgroundHandler())
-	r.POST("/api", graphqlHandler(schema))
 	return r
 }
