@@ -2,6 +2,7 @@ package base
 
 import (
 	"errors"
+	"fmt"
 	"gorm.io/gorm"
 )
 
@@ -145,7 +146,12 @@ func BuildQuery(db *gorm.DB, options ...QueryOption) *gorm.DB {
 	for _, o := range options {
 		o(query)
 	}
-
+	for _, c := range query.Condition {
+		if o, e := c.Operator.String(); e != nil {
+			db.Where(fmt.Sprintf("%s %s ?", c.Column, o), c.Value)
+		}
+	}
+	// 处理分页
 	if query.Size >= 1000 {
 		query.Size = 1000
 	}
@@ -153,6 +159,12 @@ func BuildQuery(db *gorm.DB, options ...QueryOption) *gorm.DB {
 	if query.Page > 0 {
 		offset := (query.Page - 1) * query.Size
 		db.Offset(offset).Limit(query.Size)
+	}
+	// 处理排序
+	for _, v := range query.Sort {
+		if d, e := v.Direction.String(); e == nil {
+			db.Order(fmt.Sprintf("%s %s", v.Column, d))
+		}
 	}
 	return db
 }
