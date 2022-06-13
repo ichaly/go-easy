@@ -24,7 +24,6 @@ input NewUser {
     password: String!
 }
 
-
 type Query {
     users: [User!]!
 }

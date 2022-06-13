@@ -11,8 +11,8 @@ type model interface {
 
 type Result[T model] struct {
 	Data  []T
-	Page  int64
-	Size  int64
+	Page  int
+	Size  int
 	Total int64
 }
 
