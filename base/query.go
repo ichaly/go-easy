@@ -27,58 +27,20 @@ func (my Direction) String() (val string, err error) {
 	}
 }
 
-type Operator string
+type Predicate string
 
 const (
-	EQ       Operator = "EQ"
-	NE       Operator = "NE"
-	GT       Operator = "GT"
-	GE       Operator = "GE"
-	LT       Operator = "LT"
-	LE       Operator = "LE"
-	IN       Operator = "IN"
-	LIKE     Operator = "LIKE"
-	NOT_IN   Operator = "NOT_IN"
-	NOT_LIKE Operator = "NOT_LIKE"
+	EQ       = Predicate("=")
+	NE       = Predicate("<>")
+	GT       = Predicate(">")
+	GE       = Predicate(">=")
+	LT       = Predicate("<")
+	LE       = Predicate("<=")
+	IN       = Predicate("IN")
+	LIKE     = Predicate("LIKE")
+	NOT_IN   = Predicate("NOT IN")
+	NOT_LIKE = Predicate("NOT LIKE")
 )
-
-func (my Operator) String() (val string, err error) {
-	switch my {
-	case EQ:
-		val = "="
-		return
-	case NE:
-		val = "<>"
-		return
-	case GT:
-		val = ">"
-		return
-	case GE:
-		val = ">="
-		return
-	case LT:
-		val = "<"
-		return
-	case LE:
-		val = "<="
-		return
-	case IN:
-		val = "IN"
-		return
-	case LIKE:
-		val = "LIKE"
-		return
-	case NOT_IN:
-		val = "NOT IN"
-		return
-	case NOT_LIKE:
-		val = "NOT LIKE"
-		return
-	default:
-		err = errors.New("unsupported operator")
-		return
-	}
-}
 
 type Connector string
 
@@ -103,7 +65,7 @@ func (my Connector) String() (val string, err error) {
 
 type Where struct {
 	Column    string
-	Operator  Operator
+	Operator  Predicate
 	Connector Connector
 	Value     interface{}
 }
@@ -147,9 +109,7 @@ func BuildQuery(db *gorm.DB, options ...QueryOption) *gorm.DB {
 		o(query)
 	}
 	for _, c := range query.Condition {
-		if o, e := c.Operator.String(); e != nil {
-			db.Where(fmt.Sprintf("%s %s ?", c.Column, o), c.Value)
-		}
+		db.Where(fmt.Sprintf("%s %s ?", c.Column, c.Operator), c.Value)
 	}
 	// 处理分页
 	if query.Size >= 1000 {
